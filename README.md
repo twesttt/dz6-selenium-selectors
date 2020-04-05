@@ -1,2 +1,2 @@
-# dz6-selenium-selectors
-Selenium selectors
+# dz-selenium
+Selenium hometasks
