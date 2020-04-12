@@ -1,6 +1,5 @@
 from selenium.webdriver.common.by import By
-
-from locators import MainPage, ProductPage, SearchPage, Catalog, AdminPage
+from locators import MainPage, ProductPage, SearchPage, Catalog, AdminLoginPage
 
 
 def test_elements_present_on_main_page(browser):
@@ -38,11 +37,11 @@ def test_elements_present_on_catalog_page(browser):
 def test_elements_present_on_admin_page(browser):
     br = browser
     br.get("http://localhost/opencart/admin/")
-    br.find_element(By.ID, AdminPage.USERNAME)
-    br.find_element(By.ID, AdminPage.PASSWORD)
-    br.find_element_by_css_selector(AdminPage.FORGOTTEN_PASSWORD)
-    br.find_element_by_css_selector(AdminPage.LOGIN)
-    br.find_element_by_css_selector(AdminPage.OPEN_CART)
+    br.find_element(By.ID, AdminLoginPage.USERNAME)
+    br.find_element(By.ID, AdminLoginPage.PASSWORD)
+    br.find_element_by_css_selector(AdminLoginPage.FORGOTTEN_PASSWORD)
+    br.find_element_by_css_selector(AdminLoginPage.LOGIN)
+    br.find_element_by_css_selector(AdminLoginPage.OPEN_CART)
 
 
 def test_elements_present_on_search_page(browser):
