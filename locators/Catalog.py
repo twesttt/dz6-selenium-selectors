@@ -1,4 +1,7 @@
+#!/usr/bin/env python
 class Catalog:
+    """Локаторы для каталога товаром под обычным пользователем"""
+
     HOME = "#product-category ul > li > a > i.fa-home"
 
     """List of products if 'Cameras" is selected'"""
@@ -19,4 +22,3 @@ class Catalog:
     PRODUCT_COMPARE = "#compare-total"
     SORT_BY = "#input-sort"
     SHOW = "#input-limit"
-

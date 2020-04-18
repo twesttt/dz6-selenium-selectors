@@ -1,4 +1,7 @@
+#!/usr/bin/env python
 class EditProduct:
+    """Локаторы для формы редактирования продукта"""
+
     FORM_PRODUCT = "#form-product"
     TAB_GENERAL = "a[href='#tab-general']"
     PRODUCT_NAME = "#input-name1"

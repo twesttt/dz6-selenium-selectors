@@ -1,5 +1,7 @@
+#!/usr/bin/env python
 class SearchPage:
-    """Search Criteria"""
+    """Локаторы для поиска продукта"""
+
     INPUT_SEARCH = "input-search"
     CATEGORIES = "#content select[name='category_id']"
     SEARCH_IN_DESCRIPTION = "description"

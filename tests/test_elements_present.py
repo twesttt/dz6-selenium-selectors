@@ -1,8 +1,12 @@
+#!/usr/bin/env python
+
 from selenium.webdriver.common.by import By
 from locators import MainPage, ProductPage, SearchPage, Catalog, AdminLoginPage
 
 
 def test_elements_present_on_main_page(browser):
+    """Находим элементы на главной странице"""
+
     br = browser
     br.find_element_by_class_name(MainPage.PROMOBLOCK)
     br.find_element_by_css_selector(MainPage.SEARCH_INPUT)
@@ -15,6 +19,8 @@ def test_elements_present_on_main_page(browser):
 
 
 def test_elements_present_on_product_page(browser):
+    """Находим элементы на странице продукта"""
+
     br = browser
     br.get("http://localhost/opencart/index.php?route=product/product&product_id=43")
     br.find_element_by_css_selector(ProductPage.ADD_TO_CART)
@@ -25,6 +31,8 @@ def test_elements_present_on_product_page(browser):
 
 
 def test_elements_present_on_catalog_page(browser):
+    """Находим элементы в каталоге"""
+
     br = browser
     br.get("http://localhost/opencart/index.php?route=product/category&path=33")
     br.find_element_by_css_selector(Catalog.GRID_VIEW)
@@ -35,6 +43,8 @@ def test_elements_present_on_catalog_page(browser):
 
 
 def test_elements_present_on_admin_page(browser):
+    """Находим элементы на странице входа под админом"""
+
     br = browser
     br.get("http://localhost/opencart/admin/")
     br.find_element(By.ID, AdminLoginPage.USERNAME)
@@ -45,6 +55,8 @@ def test_elements_present_on_admin_page(browser):
 
 
 def test_elements_present_on_search_page(browser):
+    """Находим элементы странице поиска продукта"""
+
     br = browser
     br.get("http://localhost/opencart/index.php?route=product/search&search=phone")
     br.find_element(By.ID, SearchPage.INPUT_SEARCH)
@@ -52,4 +64,3 @@ def test_elements_present_on_search_page(browser):
     br.find_element(By.ID, SearchPage.SEARCH_BUTTON)
     br.find_element_by_css_selector(SearchPage.CATEGORIES)
     br.find_element_by_css_selector(SearchPage.SEARCH_IN_SUBCATEGORIES)
-
