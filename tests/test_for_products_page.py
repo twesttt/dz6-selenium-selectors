@@ -4,18 +4,19 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from locators import AdminLoginPage, AdminNavigation, AdminProductsList, EditProduct
+from locators import AdminNavigation, AdminProductsList, EditProduct
+from page_objects import AdminLoginPage
 
 
-def admin_login(br):
-    """Логин под админом"""
-
-    br.get("http://localhost/opencart/admin/")
-    login = br.find_element(By.CSS_SELECTOR, AdminLoginPage.USERNAME)
-    login.send_keys("admin")
-    password = br.find_element(By.CSS_SELECTOR, AdminLoginPage.PASSWORD)
-    password.send_keys("admin")
-    br.find_element(By.CSS_SELECTOR, AdminLoginPage.LOGIN).click()
+# def admin_login(br):
+#     """Логин под админом"""
+#
+#     br.get("http://localhost/opencart/admin/")
+#     login = br.find_element(By.CSS_SELECTOR, AdminLoginPage.USERNAME)
+#     login.send_keys("admin")
+#     password = br.find_element(By.CSS_SELECTOR, AdminLoginPage.PASSWORD)
+#     password.send_keys("admin")
+#     br.find_element(By.CSS_SELECTOR, AdminLoginPage.LOGIN).click()
 
 
 def open_products_page(br):
@@ -105,7 +106,7 @@ def test_add_product(browser):
     br = browser
     br.maximize_window()
     wait = WebDriverWait(br, 10)
-    admin_login(br)
+    AdminLoginPage(br).admin_login("admin", "admin")
     wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
                                                AdminNavigation.NAVIGATION_PANEL)))
     open_products_page(br)
