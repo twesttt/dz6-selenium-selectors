@@ -1,29 +1,15 @@
 #!/usr/bin/env python
 
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from locators import AdminNavigation, AdminProductsList, EditProduct
-from page_objects import AdminLoginPage
-
-
-# def admin_login(br):
-#     """Логин под админом"""
-#
-#     br.get("http://localhost/opencart/admin/")
-#     login = br.find_element(By.CSS_SELECTOR, AdminLoginPage.USERNAME)
-#     login.send_keys("admin")
-#     password = br.find_element(By.CSS_SELECTOR, AdminLoginPage.PASSWORD)
-#     password.send_keys("admin")
-#     br.find_element(By.CSS_SELECTOR, AdminLoginPage.LOGIN).click()
+from locators import EditProduct
+from page_objects import AdminLoginPage, AdminMainPage, AdminProductsPage
 
 
 def open_products_page(br):
-    """Открываем страница Products List в админке"""
-
-    br.find_element(By.CSS_SELECTOR, AdminNavigation.MENU_CATALOG).click()
-    br.find_element(By.CSS_SELECTOR, AdminNavigation.PRODUCTS_LIST).click()
+    AdminMainPage(br).expand_catalog()
+    AdminMainPage(br).open_catalog_page(AdminMainPage.PRODUCTS_LIST)
 
 
 def fill_the_products_form_with_test_data(br, test_data):
@@ -42,7 +28,7 @@ def edit_product_name(br, name):
     """Изменяет имя продукта"""
 
     edit_product_button = br.find_element(By.CSS_SELECTOR,
-                                          AdminProductsList.FIRST_PRODUCT_EDIT_BUTTON)
+                                          AdminProductsPage.FIRST_PRODUCT_EDIT_BUTTON)
     edit_product_button.click()
     product_name = br.find_element(By.CSS_SELECTOR,
                                    EditProduct.PRODUCT_NAME)
@@ -63,7 +49,7 @@ def add_product(br, product_name):
     """Добавляет продукт"""
 
     wait = WebDriverWait(br, 10)
-    br.find_element(By.CSS_SELECTOR, AdminProductsList.ADD_PRODUCT).click()
+    br.find_element(By.CSS_SELECTOR, AdminProductsPage.ADD_PRODUCT).click()
     wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
                                                EditProduct.FORM_PRODUCT)))
     fill_the_products_form_with_test_data(br, product_name)
@@ -73,31 +59,14 @@ def add_product(br, product_name):
 def delete_product(br, name):
     """Удалаяет продукт"""
 
-    find_product(br, name)
+    AdminProductsPage(br).find_product(name)
     product_checkbox = br.find_element(By.CSS_SELECTOR,
-                                       AdminProductsList.FIRST_PRODUCT_CHECKBOX)
+                                       AdminProductsPage.FIRST_PRODUCT_CHECKBOX)
     product_checkbox.click()
     br.find_element(By.CSS_SELECTOR,
-                    AdminProductsList.DELETE_PRODUCT).click()
+                    AdminProductsPage.DELETE_PRODUCT).click()
     alert = br.switch_to_alert()
     alert.accept()
-
-
-def find_product(br, product_name):
-    """Находит продукт из списка по имени и возвращает текст из поля Product Name"""
-
-    input_product_name = br.find_element(By.CSS_SELECTOR,
-                                         AdminProductsList.PRODUCT_NAME_IN_FILTER)
-    input_product_name.clear()
-    input_product_name.send_keys(product_name)
-    br.find_element(By.CSS_SELECTOR, AdminProductsList.FILTER_BUTTON).click()
-    try:
-        found_product = br.find_element(By.CSS_SELECTOR,
-                                        AdminProductsList.FIRST_PRODUCT_IN_THE_LIST)
-        return found_product.text
-    except NoSuchElementException:
-        "Product is not found"
-        return None
 
 
 def test_add_product(browser):
@@ -108,14 +77,14 @@ def test_add_product(browser):
     wait = WebDriverWait(br, 10)
     AdminLoginPage(br).admin_login("admin", "admin")
     wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                               AdminNavigation.NAVIGATION_PANEL)))
+                                               AdminMainPage.NAVIGATION_PANEL)))
     open_products_page(br)
     wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                               AdminProductsList.ADD_PRODUCT)))
+                                               AdminProductsPage.ADD_PRODUCT)))
     add_product(br, "test_name")
     wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                               AdminProductsList.FILTER_PRODUCT_FORM)))
-    found_product_name = find_product(br, "test_name")
+                                               AdminProductsPage.FILTER_PRODUCT_FORM)))
+    found_product_name = AdminProductsPage(br).find_product("test_name")
     assert found_product_name == "test_name"
     delete_product(br, "test_name")
 
@@ -126,22 +95,24 @@ def test_edit_product(browser):
     br = browser
     br.maximize_window()
     wait = WebDriverWait(br, 10)
-    admin_login(br)
+    AdminLoginPage(br).admin_login("admin", "admin")
     wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                               AdminNavigation.NAVIGATION_PANEL)))
+                                               AdminMainPage.NAVIGATION_PANEL)))
     open_products_page(br)
     wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                               AdminProductsList.FILTER_PRODUCT_FORM)))
-    find_product(br, "iPhone")
+                                               AdminProductsPage.FILTER_PRODUCT_FORM)))
+    AdminProductsPage(br).find_product("iPhone")
+    # find_product(br, "iPhone")
     product_checkbox = br.find_element(By.CSS_SELECTOR,
-                                       AdminProductsList.FIRST_PRODUCT_CHECKBOX)
+                                       AdminProductsPage.FIRST_PRODUCT_CHECKBOX)
     product_checkbox.click()
     edit_product_name(br, "Edited iPhone")
     wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                               AdminProductsList.FILTER_PRODUCT_FORM)))
-    find_product(br, "Edited iPhone")
+                                               AdminProductsPage.FILTER_PRODUCT_FORM)))
+    AdminProductsPage(br).find_product("Edited iPhone")
+    # find_product(br, "Edited iPhone")
     product_checkbox = br.find_element(By.CSS_SELECTOR,
-                                       AdminProductsList.FIRST_PRODUCT_CHECKBOX)
+                                       AdminProductsPage.FIRST_PRODUCT_CHECKBOX)
     product_checkbox.click()
     edit_product_name(br, "iPhone")
 
@@ -152,13 +123,13 @@ def test_delete_product(browser):
     br = browser
     br.maximize_window()
     wait = WebDriverWait(br, 10)
-    admin_login(br)
+    AdminLoginPage(br).admin_login("admin", "admin")
     wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                               AdminNavigation.NAVIGATION_PANEL)))
+                                               AdminMainPage.NAVIGATION_PANEL)))
     open_products_page(br)
     wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
                                                AdminProductsList.ADD_PRODUCT)))
     add_product(br, "test_name")
     delete_product(br, "test_name")
-    found_product = find_product(br, "test_name")
+    found_product = AdminProductsPage(br).find_product("test_name")
     assert found_product is None
