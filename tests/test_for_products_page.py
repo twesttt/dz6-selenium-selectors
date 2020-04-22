@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from locators import AdminLoginPage, AdminNavigation, AdminProductsList, EditProduct
@@ -24,16 +25,16 @@ def open_products_page(br):
     br.find_element(By.CSS_SELECTOR, AdminNavigation.PRODUCTS_LIST).click()
 
 
-def fill_the_products_form_with_test_data(br):
+def fill_the_products_form_with_test_data(br, test_data):
     """Заполняем форму продукта тестовыми данными"""
 
     product_name = br.find_element(By.CSS_SELECTOR, EditProduct.PRODUCT_NAME)
-    product_name.send_keys("test_name")
+    product_name.send_keys(test_data)
     meta_tag = br.find_element(By.CSS_SELECTOR, EditProduct.META_TAG_TITLE)
-    meta_tag.send_keys("test")
+    meta_tag.send_keys(test_data)
     br.find_element(By.CSS_SELECTOR, EditProduct.TAB_DATA).click()
     model_name = br.find_element(By.CSS_SELECTOR, EditProduct.MODEL_NAME)
-    model_name.send_keys("test_model")
+    model_name.send_keys(test_data)
 
 
 def edit_product_name(br, name):
@@ -57,6 +58,17 @@ def save_product_information(br):
     save_button.click()
 
 
+def add_product(br, product_name):
+    """Добавляет продукт"""
+
+    wait = WebDriverWait(br, 10)
+    br.find_element(By.CSS_SELECTOR, AdminProductsList.ADD_PRODUCT).click()
+    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
+                                               EditProduct.FORM_PRODUCT)))
+    fill_the_products_form_with_test_data(br, product_name)
+    save_product_information(br)
+
+
 def delete_product(br, name):
     """Удалаяет продукт"""
 
@@ -78,9 +90,13 @@ def find_product(br, product_name):
     input_product_name.clear()
     input_product_name.send_keys(product_name)
     br.find_element(By.CSS_SELECTOR, AdminProductsList.FILTER_BUTTON).click()
-    found_product = br.find_element(By.CSS_SELECTOR,
-                                    AdminProductsList.FIRST_PRODUCT_IN_THE_LIST)
-    return found_product.text
+    try:
+        found_product = br.find_element(By.CSS_SELECTOR,
+                                        AdminProductsList.FIRST_PRODUCT_IN_THE_LIST)
+        return found_product.text
+    except NoSuchElementException:
+        "Product is not found"
+        return None
 
 
 def test_add_product(browser):
@@ -95,11 +111,7 @@ def test_add_product(browser):
     open_products_page(br)
     wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
                                                AdminProductsList.ADD_PRODUCT)))
-    br.find_element(By.CSS_SELECTOR, AdminProductsList.ADD_PRODUCT).click()
-    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
-                                               EditProduct.FORM_PRODUCT)))
-    fill_the_products_form_with_test_data(br)
-    save_product_information(br)
+    add_product(br, "test_name")
     wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
                                                AdminProductsList.FILTER_PRODUCT_FORM)))
     found_product_name = find_product(br, "test_name")
@@ -131,3 +143,21 @@ def test_edit_product(browser):
                                        AdminProductsList.FIRST_PRODUCT_CHECKBOX)
     product_checkbox.click()
     edit_product_name(br, "iPhone")
+
+
+def test_delete_product(browser):
+    """Проверяет удаление продукта"""
+
+    br = browser
+    br.maximize_window()
+    wait = WebDriverWait(br, 10)
+    admin_login(br)
+    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
+                                               AdminNavigation.NAVIGATION_PANEL)))
+    open_products_page(br)
+    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,
+                                               AdminProductsList.ADD_PRODUCT)))
+    add_product(br, "test_name")
+    delete_product(br, "test_name")
+    found_product = find_product(br, "test_name")
+    assert found_product is None
