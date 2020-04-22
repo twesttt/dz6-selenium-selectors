@@ -1,4 +1,7 @@
+#!/usr/bin/env python
 class MainPage:
+    """Локаторы главной страницы"""
+
     """Header content"""
     CURRENCY_MENU = "div.pull-left button"
     MY_ACCOUNT = "a[title='My Account']"
