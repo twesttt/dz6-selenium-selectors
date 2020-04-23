@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
 
-class AdminMainPage:
+class Navigation:
 
     def __init__(self, driver):
         self.driver = driver
@@ -17,8 +17,6 @@ class AdminMainPage:
         br = self.driver
         br.find_element(By.CSS_SELECTOR, self.MENU_CATALOG).click()
 
-    def open_catalog_page(self, page_locator):
+    def open_products_page(self):
         br = self.driver
-        br.find_element(By.CSS_SELECTOR, page_locator).click()
-
-
+        br.find_element(By.CSS_SELECTOR, self.PRODUCTS_LIST).click()

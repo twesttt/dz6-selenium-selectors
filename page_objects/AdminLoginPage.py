@@ -1,10 +1,10 @@
-from selenium.webdriver.common.by import By
+from .BasePage import BasePage
+import time
 
+class AdminLoginPage(BasePage):
 
-class AdminLoginPage:
-
-    def __init__(self, driver):
-        self.driver = driver
+    # def __init__(self, driver):
+    #     self.driver = driver
 
     """Локаторы на странице логина для администратора"""
 
@@ -16,10 +16,10 @@ class AdminLoginPage:
 
     def admin_login(self, username, password):
         """Логин под админом"""
-        br = self.driver
-        br.get("http://localhost/opencart/admin/")
-        login = br.find_element(By.CSS_SELECTOR, AdminLoginPage.USERNAME)
-        login.send_keys(username)
-        password_input = br.find_element(By.CSS_SELECTOR, AdminLoginPage.PASSWORD)
-        password_input.send_keys(password)
-        br.find_element(By.CSS_SELECTOR, AdminLoginPage.LOGIN).click()
+        # br = self.driver
+        self.driver.get("http://localhost/opencart/admin/")
+        self._input(self.USERNAME, username)
+        self._input(self.PASSWORD, password)
+        self._click(self.LOGIN)
+        return self
+
