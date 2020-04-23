@@ -1,11 +1,18 @@
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from .EditProductPage import EditProductPage
 
 
 class AdminProductsPage:
 
     def __init__(self, driver):
         self.driver = driver
+
+    def _wait_for_element_presence(self, element_locator, wait):
+        return WebDriverWait(self.driver, wait).\
+            until(EC.presence_of_element_located((By.CSS_SELECTOR, element_locator)))
 
     """Локаторы для страницы администрирования продуктов"""
 
@@ -35,4 +42,29 @@ class AdminProductsPage:
             return found_product.text
         except NoSuchElementException:
             "Product is not found"
-            return None
+            return False
+
+    def click_add_product(self):
+        """Добавляет продукт"""
+        br = self.driver
+        br.find_element(By.CSS_SELECTOR, AdminProductsPage.ADD_PRODUCT).click()
+
+    def click_edit_product(self):
+        """Изменяет имя продукта"""
+        br = self.driver
+        edit_product_button = br.find_element(By.CSS_SELECTOR,
+                                              self.FIRST_PRODUCT_EDIT_BUTTON)
+        edit_product_button.click()
+
+    def delete_product(self, name):
+        """Удалаяет продукт"""
+
+        br = self.driver
+        self.find_product(name)
+        product_checkbox = br.find_element(By.CSS_SELECTOR,
+                                           self.FIRST_PRODUCT_CHECKBOX)
+        product_checkbox.click()
+        br.find_element(By.CSS_SELECTOR,
+                        self.DELETE_PRODUCT).click()
+        alert = br.switch_to_alert()
+        alert.accept()
