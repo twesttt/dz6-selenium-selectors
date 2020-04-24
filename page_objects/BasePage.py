@@ -14,25 +14,30 @@ class BasePage:
         self.navigation = Navigation(self.driver)
 
     def __element(self, selector):
+        """Возвращает элемент по селектору"""
+
         by = By.CSS_SELECTOR
         return self.driver.find_element(by, selector)
 
     def _click(self, selector):
+        """Реализует клик по элементу"""
+
         ActionChains(self.driver).move_to_element(self.__element(selector)).click().perform()
 
     def _input(self, selector, value):
+        """Осуществляет ввод значения в текстовое поле"""
+
         element = self.__element(selector)
         element.clear()
         element.send_keys(value)
 
     def _wait_for_visible(self, selector, wait=3):
+        """Ожидает когда элемент станет видимым"""
+
         return WebDriverWait(self.driver, wait).until(EC.visibility_of(self.__element(selector)))
 
-    # def _wait_for_element_presence(self, element_locator, wait):
-    #     return WebDriverWait(self.driver, wait).\
-    #         until(EC.presence_of_element_located((By.CSS_SELECTOR, element_locator)))
-
     def _get_element_text(self, selector):
+        """Возвращает текстовое значение у элемента"""
         try:
             return self.__element(selector).text
         except NoSuchElementException:

@@ -1,4 +1,5 @@
 from .BasePage import BasePage
+from selenium.common.exceptions import NoSuchElementException
 
 
 class AdminProductsPage(BasePage):
@@ -50,4 +51,6 @@ class AdminProductsPage(BasePage):
         self.driver.switch_to_alert().accept()
 
     def get_product_info(self, element):
+        """Возвращает текст характеристики продукта"""
+
         return self._get_element_text(element)

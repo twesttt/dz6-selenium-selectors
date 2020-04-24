@@ -41,20 +41,28 @@ class EditProductPage(BasePage):
         self._input(self.MODEL_NAME, test_data)
 
     def change_product_price(self, price):
+        """Изменяет цену продукта"""
+
         self._click(self.TAB_DATA)
         self._input(self.INPUT_PRICE, price)
 
     def change_product_quantity(self, quantity):
+        """Изменяет количество продукта"""
+
         self._click(self.TAB_DATA)
         self._input(self.INPUT_QUANTITY, quantity)
 
     def add_special(self, priority, price):
+        """Добавляет специальную цену продукта"""
+
         self._click(self.TAB_SPECIAL)
         self._click(self.ADD_SPECIAL)
         self._input(self.INPUT_PRIORITY_OF_SPECIAL, priority)
         self._input(self.INPUT_PRICE_OF_SPECIAL, price)
 
     def delete_last_added_special(self):
+        """Удалает последнюю добавленную специальную цену продукта"""
+
         self._click(self.TAB_SPECIAL)
         self._click(self.DELETE_LAST_ADDED_SPECIAL)
 

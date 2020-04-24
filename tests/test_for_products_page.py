@@ -47,6 +47,8 @@ def test_delete_product(browser):
 
 
 def test_change_product_quantity(browser):
+    """Проверяет изменение количества продукта"""
+
     AdminLoginPage(browser).admin_login(username="admin", password="admin")
     AdminHomePage(browser).navigation.expand_catalog()
     AdminHomePage(browser).navigation.open_products_page()
@@ -64,6 +66,8 @@ def test_change_product_quantity(browser):
 
 
 def test_change_product_price(browser):
+    """Проверяет изменение цены продукта"""
+
     AdminLoginPage(browser).admin_login(username="admin", password="admin")
     AdminHomePage(browser).navigation.expand_catalog()
     AdminHomePage(browser).navigation.open_products_page()
@@ -81,6 +85,8 @@ def test_change_product_price(browser):
 
 
 def test_add_product_special_price(browser):
+    """Проверяет добавление специальной цены продукта"""
+
     AdminLoginPage(browser).admin_login(username="admin", password="admin")
     AdminHomePage(browser).navigation.expand_catalog()
     AdminHomePage(browser).navigation.open_products_page()
@@ -97,6 +103,8 @@ def test_add_product_special_price(browser):
 
 
 def test_delete_product_special_price(browser):
+    """Проверяет удаление специальной цены продукта"""
+
     AdminLoginPage(browser).admin_login(username="admin", password="admin")
     AdminHomePage(browser).navigation.expand_catalog()
     AdminHomePage(browser).navigation.open_products_page()
@@ -114,6 +122,8 @@ def test_delete_product_special_price(browser):
 
 
 def test_special_priority(browser):
+    """Проверяет установленный приоритет на специальные цены продукта"""
+
     AdminLoginPage(browser).admin_login(username="admin", password="admin")
     AdminHomePage(browser).navigation.expand_catalog()
     AdminHomePage(browser).navigation.open_products_page()
