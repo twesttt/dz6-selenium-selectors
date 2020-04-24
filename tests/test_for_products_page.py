@@ -9,7 +9,7 @@ def test_add_product(browser):
     AdminHomePage(browser).navigation.expand_catalog()
     AdminHomePage(browser).navigation.open_products_page()
     AdminProductsPage(browser).click_add_product()
-    EditProductPage(browser).fill_the_product_form_with_test_data("test_name")
+    EditProductPage(browser).fill_the_required_product_fields("test_name")
     EditProductPage(browser).save_product_information()
     assert AdminProductsPage(browser).find_product("test_name") == "test_name"
     AdminProductsPage(browser).delete_product("test_name")
@@ -23,14 +23,13 @@ def test_edit_product(browser):
     AdminHomePage(browser).navigation.open_products_page()
     AdminProductsPage(browser)._wait_for_visible(AdminProductsPage.FILTER_PRODUCT_FORM)
     AdminProductsPage(browser).find_product("iPhone")
-    AdminProductsPage(browser)._click(AdminProductsPage.FILTER_PRODUCT_FORM)
     AdminProductsPage(browser).click_edit_product()
-    EditProductPage(browser).fill_the_product_form_with_test_data("Edited iPhone")
+    EditProductPage(browser).fill_the_required_product_fields("Edited iPhone")
     EditProductPage(browser).save_product_information()
     AdminProductsPage(browser).find_product("Edited iPhone")
     AdminProductsPage(browser)._click(AdminProductsPage.FIRST_PRODUCT_CHECKBOX)
     AdminProductsPage(browser).click_edit_product()
-    EditProductPage(browser).fill_the_product_form_with_test_data("iPhone")
+    EditProductPage(browser).fill_the_required_product_fields("iPhone")
     EditProductPage(browser).save_product_information()
 
 
@@ -41,7 +40,93 @@ def test_delete_product(browser):
     AdminHomePage(browser).navigation.expand_catalog()
     AdminHomePage(browser).navigation.open_products_page()
     AdminProductsPage(browser).click_add_product()
-    EditProductPage(browser).fill_the_product_form_with_test_data("test_name")
+    EditProductPage(browser).fill_the_required_product_fields("test_name")
     EditProductPage(browser).save_product_information()
     AdminProductsPage(browser).delete_product("test_name")
     assert AdminProductsPage(browser).find_product("test_name") is False
+
+
+def test_change_product_quantity(browser):
+    AdminLoginPage(browser).admin_login(username="admin", password="admin")
+    AdminHomePage(browser).navigation.expand_catalog()
+    AdminHomePage(browser).navigation.open_products_page()
+    AdminProductsPage(browser)._wait_for_visible(AdminProductsPage.FILTER_PRODUCT_FORM)
+    AdminProductsPage(browser).find_product("iPhone")
+    original_product_quantity = AdminProductsPage(browser).get_product_info(AdminProductsPage.FIRST_PRODUCT_QUANTITY)
+    AdminProductsPage(browser).click_edit_product()
+    EditProductPage(browser).change_product_quantity("888")
+    EditProductPage(browser).save_product_information()
+    AdminProductsPage(browser).find_product("iPhone")
+    assert AdminProductsPage(browser).get_product_info(AdminProductsPage.FIRST_PRODUCT_QUANTITY) == "888"
+    AdminProductsPage(browser).click_edit_product()
+    EditProductPage(browser).change_product_quantity(original_product_quantity)
+    EditProductPage(browser).save_product_information()
+
+
+def test_change_product_price(browser):
+    AdminLoginPage(browser).admin_login(username="admin", password="admin")
+    AdminHomePage(browser).navigation.expand_catalog()
+    AdminHomePage(browser).navigation.open_products_page()
+    AdminProductsPage(browser)._wait_for_visible(AdminProductsPage.FILTER_PRODUCT_FORM)
+    AdminProductsPage(browser).find_product("iPhone")
+    original_product_price = AdminProductsPage(browser).get_product_info(AdminProductsPage.FIRST_PRODUCT_PRICE)
+    AdminProductsPage(browser).click_edit_product()
+    EditProductPage(browser).change_product_price("200")
+    EditProductPage(browser).save_product_information()
+    AdminProductsPage(browser).find_product("iPhone")
+    assert AdminProductsPage(browser).get_product_info(AdminProductsPage.FIRST_PRODUCT_PRICE) == "$200.00"
+    AdminProductsPage(browser).click_edit_product()
+    EditProductPage(browser).change_product_price(original_product_price)
+    EditProductPage(browser).save_product_information()
+
+
+def test_add_product_special_price(browser):
+    AdminLoginPage(browser).admin_login(username="admin", password="admin")
+    AdminHomePage(browser).navigation.expand_catalog()
+    AdminHomePage(browser).navigation.open_products_page()
+    AdminProductsPage(browser)._wait_for_visible(AdminProductsPage.FILTER_PRODUCT_FORM)
+    AdminProductsPage(browser).find_product("iPhone")
+    AdminProductsPage(browser).click_edit_product()
+    EditProductPage(browser).add_special(priority="1", price="50")
+    EditProductPage(browser).save_product_information()
+    AdminProductsPage(browser).find_product("iPhone")
+    assert AdminProductsPage(browser).get_product_info(AdminProductsPage.FIRST_PRODUCT_SPECIAL_PRICE) == "$50.00"
+    AdminProductsPage(browser).click_edit_product()
+    EditProductPage(browser).delete_last_added_special()
+    EditProductPage(browser).save_product_information()
+
+
+def test_delete_product_special_price(browser):
+    AdminLoginPage(browser).admin_login(username="admin", password="admin")
+    AdminHomePage(browser).navigation.expand_catalog()
+    AdminHomePage(browser).navigation.open_products_page()
+    AdminProductsPage(browser)._wait_for_visible(AdminProductsPage.FILTER_PRODUCT_FORM)
+    AdminProductsPage(browser).find_product("iPhone")
+    AdminProductsPage(browser).click_edit_product()
+    EditProductPage(browser).add_special(priority="1", price="50")
+    EditProductPage(browser).save_product_information()
+    AdminProductsPage(browser).find_product("iPhone")
+    AdminProductsPage(browser).click_edit_product()
+    EditProductPage(browser).delete_last_added_special()
+    EditProductPage(browser).save_product_information()
+    AdminProductsPage(browser).find_product("iPhone")
+    assert AdminProductsPage(browser).get_product_info(AdminProductsPage.FIRST_PRODUCT_SPECIAL_PRICE) is False
+
+
+def test_special_priority(browser):
+    AdminLoginPage(browser).admin_login(username="admin", password="admin")
+    AdminHomePage(browser).navigation.expand_catalog()
+    AdminHomePage(browser).navigation.open_products_page()
+    AdminProductsPage(browser)._wait_for_visible(AdminProductsPage.FILTER_PRODUCT_FORM)
+    AdminProductsPage(browser).find_product("iPhone")
+    AdminProductsPage(browser).click_edit_product()
+    EditProductPage(browser).add_special(priority="2", price="50")
+    EditProductPage(browser).add_special(priority="1", price="80")
+    EditProductPage(browser).save_product_information()
+    AdminProductsPage(browser).find_product("iPhone")
+    assert AdminProductsPage(browser).get_product_info(AdminProductsPage.FIRST_PRODUCT_SPECIAL_PRICE) == "$80.00"
+    AdminProductsPage(browser).click_edit_product()
+    EditProductPage(browser).delete_last_added_special()
+    EditProductPage(browser).delete_last_added_special()
+    EditProductPage(browser).save_product_information()
+

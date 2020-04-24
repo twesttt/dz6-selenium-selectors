@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -32,4 +33,8 @@ class BasePage:
     #         until(EC.presence_of_element_located((By.CSS_SELECTOR, element_locator)))
 
     def _get_element_text(self, selector):
-        return self.__element(selector).text
+        try:
+            return self.__element(selector).text
+        except NoSuchElementException:
+            "Product is not found"
+            return False
