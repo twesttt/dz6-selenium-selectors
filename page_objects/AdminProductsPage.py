@@ -26,7 +26,8 @@ class AdminProductsPage(BasePage):
 
     def find_product(self, product_name):
         """Находит продукт из списка по имени и возвращает текст из поля Product Name"""
-        br = self.driver
+        # br = self.driver
+        self._wait_for_visible(self.FILTER_PRODUCT_FORM)
         self._input(self.INPUT_PRODUCT_NAME_IN_FILTER, product_name)
         # input_product_name = br.find_element(By.CSS_SELECTOR,
         #                                      self.INPUT_PRODUCT_NAME_IN_FILTER)
