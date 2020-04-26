@@ -23,6 +23,7 @@ class BasePage:
         """Реализует клик по элементу"""
 
         ActionChains(self.driver).move_to_element(self.__element(selector)).click().perform()
+        return self
 
     def _input(self, selector, value):
         """Осуществляет ввод значения в текстовое поле"""
@@ -34,7 +35,8 @@ class BasePage:
     def _wait_for_visible(self, selector, wait=3):
         """Ожидает когда элемент станет видимым"""
 
-        return WebDriverWait(self.driver, wait).until(EC.visibility_of(self.__element(selector)))
+        WebDriverWait(self.driver, wait).until(EC.visibility_of(self.__element(selector)))
+        return self
 
     def _get_element_text(self, selector):
         """Возвращает текстовое значение у элемента"""

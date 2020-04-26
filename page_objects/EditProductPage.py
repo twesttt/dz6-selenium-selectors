@@ -39,18 +39,21 @@ class EditProductPage(BasePage):
         self._input(self.META_TAG_TITLE, test_data)
         self._click(self.TAB_DATA)
         self._input(self.MODEL_NAME, test_data)
+        return self
 
     def change_product_price(self, price):
         """Изменяет цену продукта"""
 
         self._click(self.TAB_DATA)
         self._input(self.INPUT_PRICE, price)
+        return self
 
     def change_product_quantity(self, quantity):
         """Изменяет количество продукта"""
 
         self._click(self.TAB_DATA)
         self._input(self.INPUT_QUANTITY, quantity)
+        return self
 
     def add_special(self, priority, price):
         """Добавляет специальную цену продукта"""
@@ -59,12 +62,14 @@ class EditProductPage(BasePage):
         self._click(self.ADD_SPECIAL)
         self._input(self.INPUT_PRIORITY_OF_SPECIAL, priority)
         self._input(self.INPUT_PRICE_OF_SPECIAL, price)
+        return self
 
     def delete_last_added_special(self):
         """Удалает последнюю добавленную специальную цену продукта"""
 
         self._click(self.TAB_SPECIAL)
         self._click(self.DELETE_LAST_ADDED_SPECIAL)
+        return self
 
     def save_product_information(self):
         """Сохранить изменения в описании продукта"""
