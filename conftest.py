@@ -22,6 +22,7 @@ def browser(request):
         raise Exception(f"{request.param} is not supported!")
     wait_param = request.config.getoption("--wait")
     driver.implicitly_wait(wait_param)
+    driver.maximize_window()
     request.addfinalizer(driver.close)
     driver.get(request.config.getoption("--url"))
 
