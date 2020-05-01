@@ -5,7 +5,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from .common.Navigation import Navigation
-
+import os
 
 class BasePage:
 
@@ -17,6 +17,12 @@ class BasePage:
         """Возвращает элемент по селектору"""
 
         by = By.CSS_SELECTOR
+        return self.driver.find_element(by, selector)
+
+    def _find_element_by_link_text(self, selector):
+        """Возвращает элемент по селектору"""
+
+        by = By.LINK_TEXT
         return self.driver.find_element(by, selector)
 
     def _click(self, selector):
@@ -36,6 +42,11 @@ class BasePage:
         """Ожидает когда элемент станет видимым"""
 
         WebDriverWait(self.driver, wait).until(EC.visibility_of(self.__element(selector)))
+        return self
+
+    def _wait_for_appearance(self, selector, wait=15):
+        locator = (By.CSS_SELECTOR, selector)
+        WebDriverWait(self.driver, wait).until(EC.presence_of_element_located(locator))
         return self
 
     def _get_element_text(self, selector):

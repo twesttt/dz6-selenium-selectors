@@ -3,6 +3,8 @@
 # from selenium.webdriver.support.wait import WebDriverWait
 # from selenium.webdriver.support import expected_conditions as EC
 from .BasePage import BasePage
+import time
+import os
 
 
 class EditProductPage(BasePage):
@@ -30,6 +32,9 @@ class EditProductPage(BasePage):
     INPUT_PRICE_OF_SPECIAL = "table[id='special'] tbody tr:nth-last-child(1) input[placeholder='Price']"
     TAB_IMAGE = "a[href='#tab-image']"
     SAVE_BUTTON = "button[data-original-title='Save']"
+    UPLOADED_IMAGE = "a[data-toggle='image']"
+    EDIT_IMAGE_BUTTON = "#button-image"
+    IMAGE_INPUT = "input[type='file']"
 
     def fill_the_required_product_fields(self, test_data):
         """Заполняем форму продукта тестовыми данными"""
@@ -40,6 +45,28 @@ class EditProductPage(BasePage):
         self._click(self.TAB_DATA)
         self._input(self.MODEL_NAME, test_data)
         return self
+
+    def change_product_image(self):
+        browser = self.driver
+        dirname = os.path.dirname(__file__)
+        filename = os.path.join(dirname, 'cat.png')
+        js = "$('body').prepend" + "('<form " + "enctype='multipart/form-data' " + "id='form-upload' " + "style=" + \
+             "'display: none;'" + "><input type='file' "\
+             + "name=" + "'file[]' " + "value='' " + "multiple='multiple' " + "/></form>');"
+        print(js)
+        self._click(self.TAB_IMAGE)
+        self._click(self.UPLOADED_IMAGE)
+        self._click(self.EDIT_IMAGE_BUTTON)
+        browser.execute_script("$('#button-upload').click();")
+        """Здесь должен запускаться скрипрт onclick, который аппенидит форму form-upload"""
+        """Если делать кликать не через селениум она появляется, но когда через селениум -её нет"""
+        browser.execute_script(js)
+        """Здесь я пыталась создать эту форму вручную, слишком сложно с этими ковычками"""
+        self._wait_for_appearance("#form-upload")
+        browser.execute_script("$('#form-upload').style.display = 'block'")
+        self._input(self.IMAGE_INPUT, filename)
+        browser.switch_to_alert().accept()
+        self._find_element_by_link_text("cat.png").click()
 
     def change_product_price(self, price):
         """Изменяет цену продукта"""
@@ -75,3 +102,4 @@ class EditProductPage(BasePage):
         """Сохранить изменения в описании продукта"""
 
         self._click(self.SAVE_BUTTON)
+
