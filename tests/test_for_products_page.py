@@ -167,3 +167,15 @@ def test_special_priority(browser):
         .delete_last_added_special() \
         .save_product_information()
 
+
+def test_change_image(browser):
+    AdminLoginPage(browser).admin_login(username="admin", password="admin")
+    AdminHomePage(browser).navigation \
+        .expand_catalog() \
+        .open_products_page()
+    AdminProductsPage(browser) \
+        ._wait_for_visible(AdminProductsPage.FILTER_PRODUCT_FORM) \
+        .find_product("iPhone")
+    AdminProductsPage(browser).click_edit_product()
+    EditProductPage(browser).change_product_image()
+    EditProductPage(browser).save_product_information()
