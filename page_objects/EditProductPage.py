@@ -60,8 +60,10 @@ class EditProductPage(BasePage):
         browser.execute_script("$('#button-upload').click();")
         """Здесь должен запускаться скрипрт onclick, который аппенидит форму form-upload"""
         """Если делать кликать не через селениум она появляется, но когда через селениум -её нет"""
+
         browser.execute_script(js)
-        """Здесь я пыталась создать эту форму вручную, слишком сложно с этими ковычками"""
+        """Здесь я пыталась создать эту форму вручную, слишком сложно с этими ковычками, не получилось"""
+
         self._wait_for_appearance("#form-upload")
         browser.execute_script("$('#form-upload').style.display = 'block'")
         self._input(self.IMAGE_INPUT, filename)
