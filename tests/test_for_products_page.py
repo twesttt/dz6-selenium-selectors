@@ -6,6 +6,7 @@ def test_add_product(browser):
     """Проверяет воркфлоу добавления продукта с тестовым именем "test_name", после удаляет его"""
 
     AdminLoginPage(browser).admin_login(username="admin", password="admin")
+
     AdminHomePage(browser).navigation \
         .expand_catalog() \
         .open_products_page()
@@ -14,7 +15,9 @@ def test_add_product(browser):
         .fill_the_required_product_fields("test_name") \
         .save_product_information()
     assert AdminProductsPage(browser).find_product("test_name") == "test_name"
-    AdminProductsPage(browser).delete_product("test_name")
+    AdminProductsPage(browser) \
+        .delete_product("test_name") \
+        .check_console_logs()
 
 
 def test_edit_product(browser):
@@ -37,7 +40,8 @@ def test_edit_product(browser):
         .click_edit_product()
     EditProductPage(browser) \
         .fill_the_required_product_fields("iPhone") \
-        .save_product_information()
+        .save_product_information() \
+        .check_console_logs()
 
 
 def test_delete_product(browser):
@@ -49,7 +53,9 @@ def test_delete_product(browser):
     AdminProductsPage(browser).click_add_product()
     EditProductPage(browser).fill_the_required_product_fields("test_name")
     EditProductPage(browser).save_product_information()
-    AdminProductsPage(browser).delete_product("test_name")
+    AdminProductsPage(browser) \
+        .delete_product("test_name") \
+        .check_console_logs()
     assert AdminProductsPage(browser).find_product("test_name") is False
 
 
@@ -73,7 +79,8 @@ def test_change_product_quantity(browser):
     AdminProductsPage(browser).click_edit_product()
     EditProductPage(browser) \
         .change_product_quantity(original_product_quantity) \
-        .save_product_information()
+        .save_product_information() \
+        .check_console_logs()
 
 
 def test_change_product_price(browser):
@@ -96,7 +103,8 @@ def test_change_product_price(browser):
     AdminProductsPage(browser).click_edit_product()
     EditProductPage(browser) \
         .change_product_price(original_product_price) \
-        .save_product_information()
+        .save_product_information() \
+        .check_console_logs()
 
 
 def test_add_product_special_price(browser):
@@ -118,7 +126,8 @@ def test_add_product_special_price(browser):
     AdminProductsPage(browser).click_edit_product()
     EditProductPage(browser) \
         .delete_last_added_special() \
-        .save_product_information()
+        .save_product_information() \
+        .check_console_logs()
 
 
 def test_delete_product_special_price(browser):
@@ -141,6 +150,7 @@ def test_delete_product_special_price(browser):
         .delete_last_added_special() \
         .save_product_information()
     AdminProductsPage(browser).find_product("iPhone")
+    AdminProductsPage(browser).check_console_logs()
     assert AdminProductsPage(browser).get_product_info(AdminProductsPage.FIRST_PRODUCT_SPECIAL_PRICE) is False
 
 
@@ -165,5 +175,6 @@ def test_special_priority(browser):
     EditProductPage(browser) \
         .delete_last_added_special() \
         .delete_last_added_special() \
-        .save_product_information()
+        .save_product_information() \
+        .check_console_logs()
 

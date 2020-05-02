@@ -1,5 +1,6 @@
 from .BasePage import BasePage
 from selenium.common.exceptions import NoSuchElementException
+import logging
 
 
 class AdminProductsPage(BasePage):
@@ -20,9 +21,12 @@ class AdminProductsPage(BasePage):
     FIRST_PRODUCT_SPECIAL_PRICE = "#form-product > div > table > tbody > tr > td:nth-child(5) .text-danger"
     FIRST_PRODUCT_QUANTITY = "#form-product > div > table > tbody > tr > td:nth-child(6)"
 
+    logger = logging.getLogger("AdminProductsPage")
+    logger.warning("I'm on Admin Product Page")
+
     def find_product(self, product_name):
         """Находит продукт из списка по имени и возвращает текст из поля Product Name"""
-
+        self.logger.info(f"I'm looking for product {product_name}")
         self._wait_for_visible(self.FILTER_PRODUCT_FORM)
         self._input(self.INPUT_PRODUCT_NAME_IN_FILTER, product_name)
         self._click(self.FILTER_BUTTON)
@@ -47,8 +51,10 @@ class AdminProductsPage(BasePage):
 
         self.find_product(name)
         self._click(self.FIRST_PRODUCT_CHECKBOX)
+        self.logger.info(f"I'm going to delete {name} product")
         self._click(self.DELETE_PRODUCT)
-        self.driver.switch_to_alert().accept()
+        self.driver.switch_to.alert.accept()
+        return self
 
     def get_product_info(self, element):
         """Возвращает текст характеристики продукта"""
