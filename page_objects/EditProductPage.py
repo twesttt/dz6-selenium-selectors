@@ -3,6 +3,7 @@
 # from selenium.webdriver.support.wait import WebDriverWait
 # from selenium.webdriver.support import expected_conditions as EC
 from .BasePage import BasePage
+import logging
 
 
 class EditProductPage(BasePage):
@@ -31,6 +32,9 @@ class EditProductPage(BasePage):
     TAB_IMAGE = "a[href='#tab-image']"
     SAVE_BUTTON = "button[data-original-title='Save']"
 
+    logger = logging.getLogger('EditProductPage')
+    logger.info("I'm on Edit Product Page")
+
     def fill_the_required_product_fields(self, test_data):
         """Заполняем форму продукта тестовыми данными"""
 
@@ -39,6 +43,7 @@ class EditProductPage(BasePage):
         self._input(self.META_TAG_TITLE, test_data)
         self._click(self.TAB_DATA)
         self._input(self.MODEL_NAME, test_data)
+        self.logger.info("Product form is filled with new data")
         return self
 
     def change_product_price(self, price):
@@ -46,6 +51,7 @@ class EditProductPage(BasePage):
 
         self._click(self.TAB_DATA)
         self._input(self.INPUT_PRICE, price)
+        self.logger.info(f'Product price is changed to {price}')
         return self
 
     def change_product_quantity(self, quantity):
@@ -53,6 +59,7 @@ class EditProductPage(BasePage):
 
         self._click(self.TAB_DATA)
         self._input(self.INPUT_QUANTITY, quantity)
+        self.logger.info(f'Product quantity is changed to {quantity}')
         return self
 
     def add_special(self, priority, price):
@@ -75,3 +82,5 @@ class EditProductPage(BasePage):
         """Сохранить изменения в описании продукта"""
 
         self._click(self.SAVE_BUTTON)
+        self.logger.info("New product information is saved")
+        return self
