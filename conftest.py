@@ -14,6 +14,7 @@ def pytest_addoption(parser):
     parser.addoption("--wait", action="store", default=20, help="Specify browser implicitly wait")
     parser.addoption("--log_file", action="store", default=None, help="Specify file name for the log output")
     parser.addoption("--log_level", action="store", default="warning", help="Define log level")
+    parser.addoption("--executor", action="store", default="172.18.0.1")
 
 
 class MyListener(AbstractEventListener):
@@ -81,4 +82,14 @@ def browser(request):
     return driver
 
 
-
+@pytest.fixture
+def remote(request):
+    wait_param = request.config.getoption("--wait")
+    browser = request.config.getoption("--browser")
+    executor = request.config.getoption("--executor")
+    wd = webdriver.Remote(command_executor=f"http://{executor}:4444/wd/hub",
+                          desired_capabilities={"browserName": browser, "platform": "linux"})
+    wd.implicitly_wait(wait_param)
+    wd.maximize_window()
+    request.addfinalizer(wd.quit)
+    return wd

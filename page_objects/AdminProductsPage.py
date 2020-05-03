@@ -38,7 +38,8 @@ class AdminProductsPage(BasePage):
 
     def click_add_product(self):
         """Добавляет продукт"""
-
+        print("Add product")
+        self._wait_for_visible(AdminProductsPage.ADD_PRODUCT)
         self._click(AdminProductsPage.ADD_PRODUCT)
 
     def click_edit_product(self):
