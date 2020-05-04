@@ -16,7 +16,7 @@ class AdminLoginPage(BasePage):
 
     def admin_login(self, username, password):
         """Логин под админом"""
-        self.driver.get("http://localhost/opencart/admin/")
+
         self._input(self.USERNAME, username)
         self._input(self.PASSWORD, password)
         self._click(self.LOGIN)
