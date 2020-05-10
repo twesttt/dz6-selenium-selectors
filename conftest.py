@@ -9,11 +9,13 @@ import logging
 def pytest_addoption(parser):
     """Параметр для задания url"""
 
-    parser.addoption("--url", "-U", action="store", default="http://localhost/opencart", help="Specify opencart url")
-    parser.addoption("--browser", "-B", action="store", default="chrome", help="Select browser")
+    # parser.addoption("--url", "-U", action="store", default="http://localhost/opencart", help="Specify opencart url")
+    parser.addoption("--url", "-U", action="store", default="https://demo.opencart.com/admin", help="Specify opencart url")
+    parser.addoption("--browser", "-B", action="store", default="firefox", help="Select browser")
     parser.addoption("--wait", action="store", default=20, help="Specify browser implicitly wait")
     parser.addoption("--log_file", action="store", default=None, help="Specify file name for the log output")
     parser.addoption("--log_level", action="store", default="warning", help="Define log level")
+    parser.addoption("--executor", action="store", default="192.168.0.100")
 
 
 class MyListener(AbstractEventListener):
@@ -56,9 +58,6 @@ class MyListener(AbstractEventListener):
 
 @pytest.fixture
 def browser(request):
-    """Вот здесь изаначально планировала задавать basicConfig, но так не работала, basicConfig создавался на BasePage"""
-    # logging.basicConfig(filename=request.config.getoption("--log_file"),
-    #                     level=request.config.getoption("--log_level"))
     logging.info("----Browser initialization----")
     browser_param = request.config.getoption("--browser")
     if browser_param == "chrome":
@@ -81,4 +80,42 @@ def browser(request):
     return driver
 
 
+"""Run tests remotely using Selenium Grid"""
+@pytest.fixture
+def remote(request):
+    wait_param = request.config.getoption("--wait")
+    browser = request.config.getoption("--browser")
+    executor = request.config.getoption("--executor")
+    wd = webdriver.Remote(command_executor=f"http://{executor}:4444/wd/hub",
+                          desired_capabilities={"browserName": browser})
+    wd.implicitly_wait(wait_param)
+    wd.maximize_window()
+    request.addfinalizer(wd.quit)
+    return wd
 
+
+"""Run tests in cloud: browserstack.com"""
+
+BROWSERSTACK_URL = 'https://bsuser68289:smCMgosDxjqegxW2Rvfe@hub-cloud.browserstack.com/wd/hub'
+
+desired_cap = {
+
+    'os': 'Windows',
+    'os_version': '10',
+    'browser': 'Firefox',
+    'browser_version': '76.0 beta',
+    'name': "Test Demo Opencart Firefox "
+
+}
+
+
+@pytest.fixture
+def cloud(request):
+    wait_param = request.config.getoption("--wait")
+    url = request.config.getoption("--url")
+    wd = webdriver.Remote(command_executor=BROWSERSTACK_URL, desired_capabilities=desired_cap)
+    wd.implicitly_wait(wait_param)
+    wd.maximize_window()
+    wd.get(url)
+    request.addfinalizer(wd.quit)
+    return wd
