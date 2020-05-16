@@ -1,13 +1,11 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import allure
 import logging
-import argparse
 from .common.Navigation import Navigation
 
-from selenium.webdriver.support.events import EventFiringWebDriver, AbstractEventListener
 
 
 class BasePage:
@@ -29,17 +27,16 @@ class BasePage:
 
     def _click(self, selector):
         """Реализует клик по элементу"""
-
-        self.__element(selector).click()
-        """Когда я добавила обёртку EventFiringWebDriver стал падать .move_to..., пришлось отказаться от ActionChains"""
-        # ActionChains(self.driver).move_to_element(self.__element(selector)).click().perform()
-        return self
+        with allure.step(f"Клик по элементу {selector}"):
+            self.__element(selector).click()
+            return self
 
     def _input(self, selector, value):
         """Осуществляет ввод значения в текстовое поле"""
         element = self.__element(selector)
         element.clear()
-        element.send_keys(value)
+        with allure.step(f"В поле: {selector} вводим значение: {value}"):
+            element.send_keys(value)
 
     def _wait_for_visible(self, selector, wait=3):
         """Ожидает когда элемент станет видимым"""
@@ -56,8 +53,9 @@ class BasePage:
             return False
 
     def check_console_logs(self):
-        console_logs = self.driver.get_log("browser")
-        if len(console_logs) > 0:
-            for i in console_logs:
-                print(i)
-            logging.warning("THERE ARE ERRORS IN CONSOLE")
+        with allure.step("Проверяем наличие ошибок в консоли:"):
+            console_logs = self.driver.get_log("browser")
+            if len(console_logs) > 0:
+                for i in console_logs:
+                    print(i)
+                logging.warning("THERE ARE ERRORS IN CONSOLE")

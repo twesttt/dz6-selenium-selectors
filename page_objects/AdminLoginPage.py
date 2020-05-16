@@ -1,6 +1,6 @@
 from .BasePage import BasePage
 import logging
-
+import allure
 
 class AdminLoginPage(BasePage):
     """Локаторы на странице логина для администратора"""
@@ -16,10 +16,10 @@ class AdminLoginPage(BasePage):
 
     def admin_login(self, username, password):
         """Логин под админом"""
-
-        self._wait_for_visible(self.USERNAME)
-        self._input(self.USERNAME, username)
-        self._input(self.PASSWORD, password)
-        self._click(self.LOGIN)
-        self.logger.info(f"I've logged in under '{username}'")
-        return self
+        with allure.step(f"Логинимся под:{username}"):
+            self._wait_for_visible(self.USERNAME)
+            self._input(self.USERNAME, username)
+            self._input(self.PASSWORD, password)
+            self._click(self.LOGIN)
+            self.logger.info(f"I've logged in under '{username}'")
+            return self
