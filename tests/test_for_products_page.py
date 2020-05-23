@@ -117,7 +117,7 @@ def test_change_product_price(browser):
         .check_console_logs()
 
 
-@allure.feature('Изменение цены не продукт')
+@allure.feature('Изменение цены на продукт')
 @allure.severity(allure.severity_level.NORMAL)
 def test_add_product_special_price(browser):
     """Проверяет добавление специальной цены продукта"""
@@ -142,7 +142,7 @@ def test_add_product_special_price(browser):
         .check_console_logs()
 
 
-@allure.feature('Изменение цены не продукт')
+@allure.feature('Изменение цены на продукт')
 @allure.severity(allure.severity_level.CRITICAL)
 def test_delete_product_special_price(browser):
     """Проверяет удаление специальной цены продукта"""
@@ -168,7 +168,7 @@ def test_delete_product_special_price(browser):
     assert AdminProductsPage(browser).get_product_info(AdminProductsPage.FIRST_PRODUCT_SPECIAL_PRICE) is False
 
 
-@allure.feature('Изменение цены не продукт')
+@allure.feature('Изменение цены на продукт')
 @allure.severity(allure.severity_level.TRIVIAL)
 def test_special_priority(browser):
     """Проверяет установленный приоритет на специальные цены продукта"""
