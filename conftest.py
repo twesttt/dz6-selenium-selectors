@@ -106,13 +106,13 @@ def selenoid(request):
 
 
 @pytest.fixture
-def connect_db(request, host, name, password):
-    connection = mysql.connector.connect(user=name, password=password, host=host, port='3306')
+def connect_db(request):
+    connection = mysql.connector.connect(user='ocuser', password='PASSWORD', database='opencart', host='0.0.0.0', port='3306')
     cursor = connection.cursor()
 
     def fin():
         cursor.close()
         connection.close()
-
+    #
     request.addfinalizer(fin())
     return cursor
