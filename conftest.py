@@ -5,6 +5,7 @@ from selenium.webdriver.support.events import EventFiringWebDriver, AbstractEven
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import logging
 import mysql.connector
+import paramiko
 
 
 def pytest_addoption(parser):
@@ -107,12 +108,35 @@ def selenoid(request):
 
 @pytest.fixture
 def connect_db(request):
-    connection = mysql.connector.connect(user='ocuser', password='PASSWORD', database='opencart', host='0.0.0.0', port='3306')
+    connection = mysql.connector.connect(user='ocuser', password='PASSWORD', database='opencart', host='0.0.0.0',
+                                         port='3306')
     cursor = connection.cursor()
 
     def fin():
         cursor.close()
         connection.close()
+
     #
     request.addfinalizer(fin())
     return cursor
+
+
+@pytest.fixture(scope='session')
+def connect_ssh(request):
+    host = '192.168.0.106'
+    port = 22
+    username = 'tta'
+    password = '111'
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+    yield
+
+    def fin():
+        print("Teardown ssh")
+        ssh.close()
+
+    request.addfinalizer(fin())
+    return ssh.connect(hostname=host, port=port, username=username, password=password)
+
+
