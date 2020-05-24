@@ -182,18 +182,6 @@ def test_special_priority(browser):
         .check_console_logs()
 
 
-# def connect_db():
-#     connection = mysql.connector.connect(user='ocuser', password='PASSWORD', database='opencart', host='0.0.0.0', port='3306')
-#     return connection.cursor()
-#
-#
-# def test_select():
-#
-#     cursor = connect_db()
-#     cursor.execute("SELECT * FROM oc_product;")
-#     for row in cursor.fetchall():
-#         print(row)
-
 def test_add_product_connecting_db(browser):
     """Проверяет воркфлоу добавления продукта с тестовым именем "test_name", после удаляет его"""
 
