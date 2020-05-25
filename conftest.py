@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.support.events import EventFiringWebDriver, AbstractEventListener
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import logging
+import mysql.connector
 
 
 def pytest_addoption(parser):
@@ -102,3 +103,16 @@ def selenoid(request):
     wd.get(url)
     request.addfinalizer(wd.quit)
     return wd
+
+
+@pytest.fixture
+def connect_db(request):
+    connection = mysql.connector.connect(user='ocuser', password='PASSWORD', database='opencart', host='0.0.0.0', port='3306')
+    cursor = connection.cursor()
+
+    def fin():
+        cursor.close()
+        connection.close()
+    #
+    request.addfinalizer(fin())
+    return cursor
