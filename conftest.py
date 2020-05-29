@@ -80,25 +80,25 @@ def browser(request):
     return driver
 
 
-"""Run tests remotely using Selenoid"""
+"""Run tests remotely using browser"""
 
-
-@pytest.fixture
-def selenoid(request):
-    wait_param = request.config.getoption("--wait")
-    url = request.config.getoption("--url")
-    capabilities = {
-        "browserName": "chrome",
-        "version": "79.0",
-        "enableVNC": True,
-        "enableVideo": False,
-        "name": "Tanya"
-    }
-    executor = request.config.getoption("--executor")
-    wd = webdriver.Remote(command_executor=f"http://{executor}:4444/wd/hub",
-                          desired_capabilities=capabilities)
-    wd.implicitly_wait(wait_param)
-    wd.maximize_window()
-    wd.get(url)
-    request.addfinalizer(wd.quit)
-    return wd
+#
+# @pytest.fixture
+# def browser(request):
+#     wait_param = request.config.getoption("--wait")
+#     url = request.config.getoption("--url")
+#     capabilities = {
+#         "browserName": "chrome",
+#         "version": "79.0",
+#         "enableVNC": True,
+#         "enableVideo": False,
+#         "name": "Tanya"
+#     }
+#     executor = request.config.getoption("--executor")
+#     wd = webdriver.Remote(command_executor=f"http://{executor}:4444/wd/hub",
+#                           desired_capabilities=capabilities)
+#     wd.implicitly_wait(wait_param)
+#     wd.maximize_window()
+#     wd.get(url)
+#     request.addfinalizer(wd.quit)
+#     return wd
