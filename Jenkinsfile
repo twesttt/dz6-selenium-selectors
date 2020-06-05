@@ -14,10 +14,7 @@ pipeline {
                 sh "free -h"
             }
         }
-
-
         stage("Build docker image") {
-            agent {dockerfile true}
             steps {
                 sh "git clone https://github.com/twesttt/dz6-selenium-selectors.git"
                 sh "cd dz6-selenium-selectors"
@@ -25,7 +22,7 @@ pipeline {
                 sh "git pull"
                 sh "docker build -t mytest Dockerfile"
                 echo "Heloo"
-
             }
         }
     }
+}
