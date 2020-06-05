@@ -29,12 +29,12 @@ pipeline {
         }
 
         stage("Allure report"){
-                steps {
-                    allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
-                }
+            steps {
+                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
             }
         }
     }
+}
 //     post {
 //         always {
 //             stage("Allure report"){
@@ -44,4 +44,3 @@ pipeline {
 //             }
 //         }
 //     }
-}
