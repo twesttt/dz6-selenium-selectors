@@ -30,18 +30,16 @@ pipeline {
                 sh "docker run mytest"
             }
         }
-         post {
-            always {
-                script {
-                    allure([
-                        includeProperties: false,
-                        jdk: '',
-                        properties: [],
-                        reportBuildPolicy: 'ALWAYS',
-                        results: [[path: './allure-results']]
-                     ])
-                }
-            }
-         }
+
+        stage("Allure Reports") {
+            allure([
+                includeProperties: false,
+                jdk: '',
+                    properties: [],
+                    reportBuildPolicy: 'ALWAYS',
+                    results: [[path: './allure-results']]
+                ])
+        }
+
     }
 }
