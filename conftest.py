@@ -49,7 +49,7 @@ class MyListener(AbstractEventListener):
         self.logger.info(f"I'm getting ready to terminate {driver}")
 
     def after_quit(self, driver):
-        self.logger.info(f"WASTED!!!")
+        self.logger.info(f"WASTED!!")
 
     def on_exception(self, exception, driver):
         logging.error(f'Oooops i got: {exception}')
