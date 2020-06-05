@@ -15,20 +15,17 @@ pipeline {
             }
         }
 
-//         stage("Clone the code") {
-//             steps {
-//                 sh "git clone https://github.com/twesttt/dz6-selenium-selectors.git"
-//             }
-//         }
 
         stage("Build docker image") {
+            agent {dockerfile true}
             steps {
+                sh "git clone https://github.com/twesttt/dz6-selenium-selectors.git"
                 sh "cd dz6-selenium-selectors"
                 sh "git checkout allure-report"
                 sh "git pull"
-                def testImage = docker.build("mytest", "Dockerfile")
-//                 sh "docker build -t mytest Dockerfile"
+                sh "docker build -t mytest Dockerfile"
+                echo "Heloo"
+
             }
         }
     }
-}
