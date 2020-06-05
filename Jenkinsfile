@@ -25,16 +25,33 @@ pipeline {
             }
         }
 
-        stage("Run tests in Docker and get Allure reports") {
-            steps {
-                sh "docker run mytest"
+//         stage("Run tests in Docker") {
+//             steps {
+//                 sh "docker run mytest"
+//             }
+//         }
+        stage("Run tests"){
+            try {
+                docker run mytest
+            } catch (e) {
+                currentBuild.result = 'FAILURE'
+                throw e
+            } finally {
+                stage('Reports') {
+                    allure([
+                        includeProperties: false,
+                        jdk: '',
+                        properties: [],
+                        reportBuildPolicy: 'ALWAYS',
+                        results: [[path: 'target/allure-results']]
+                    ])
+                }
             }
         }
-
-        stage("Allure Reports") {
-             steps {
-                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
-             }
+//         stage("Allure Reports") {
+//              steps {
+//                 allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+//              }
 //             allure([
 //                 includeProperties: false,
 //                 jdk: '',
