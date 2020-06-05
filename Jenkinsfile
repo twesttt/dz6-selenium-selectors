@@ -26,9 +26,8 @@ pipeline {
                 sh "cd dz6-selenium-selectors"
                 sh "git checkout allure-report"
                 sh "git pull"
-//                 docker { image 'hello-world' }
-                sh "docker build -t mytest Dockerfile"
-
+                def testImage = docker.build("mytest", "Dockerfile")
+//                 sh "docker build -t mytest Dockerfile"
             }
         }
     }
