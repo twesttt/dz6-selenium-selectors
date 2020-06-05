@@ -9,7 +9,7 @@ import logging
 def pytest_addoption(parser):
     """Параметр для задания url"""
 
-    parser.addoption("--url", "-U", action="store", default="https://evo-lutio.livejournal.com/",
+    parser.addoption("--url", "-U", action="store", default="http://192.168.0.100/opencart/admin/",
                      help="Specify opencart url")
     parser.addoption("--browser", "-B", action="store", default="chrome", help="Select browser")
     parser.addoption("--wait", action="store", default=20, help="Specify browser implicitly wait")
@@ -71,10 +71,10 @@ def browser(request):
         driver = EventFiringWebDriver(webdriver.Firefox(), MyListener())
     else:
         raise Exception(f"{request.param} is not supported!")
-    driver.get(request.config.getoption("--url"))
+    driver.maximize_window()
     wait_param = request.config.getoption("--wait")
     driver.implicitly_wait(wait_param)
-    driver.maximize_window()
+    driver.get(request.config.getoption("--url"))
     logging.info("----End of browser fixture----")
     request.addfinalizer(driver.close)
     return driver
