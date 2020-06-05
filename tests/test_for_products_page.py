@@ -91,6 +91,7 @@ def test_change_product_quantity(browser):
         .save_product_information() \
         .check_console_logs()
 
+
 @allure.feature('Добавление/редактирование/удаление продуктка')
 @allure.severity(allure.severity_level.CRITICAL)
 def test_change_product_price(browser):
