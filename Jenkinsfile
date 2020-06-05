@@ -9,15 +9,24 @@ pipeline {
         timestamps()
     }
     stages {
-        stage("First step") {
+        stage("Check system memory") {
             steps {
                 sh "free -h"
             }
         }
 
-        stage("Third step") {
+//         stage("Clone the code") {
+//             steps {
+//                 sh "git clone https://github.com/twesttt/dz6-selenium-selectors.git"
+//             }
+//         }
+
+        stage("Build docker image") {
             steps {
-                sh "git clone https://github.com/twesttt/dz6-selenium-selectors.git"
+                sh "cd dz6-selenium-selectors"
+                sh "git checkout allure-report"
+                sh "git pull"
+                sh "sudo docker build -t mytest ."
             }
         }
     }
