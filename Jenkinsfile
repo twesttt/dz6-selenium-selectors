@@ -31,20 +31,24 @@ pipeline {
 //             }
 //         }
         stage("Run tests"){
-            try {
-                docker run mytest
-            } catch (e) {
-                currentBuild.result = 'FAILURE'
-                throw e
-            } finally {
-                stage('Reports') {
-                    allure([
-                        includeProperties: false,
-                        jdk: '',
-                        properties: [],
-                        reportBuildPolicy: 'ALWAYS',
-                        results: [[path: 'target/allure-results']]
-                    ])
+            steps{
+                try {
+                    docker run mytest
+                } catch (e) {
+                    currentBuild.result = 'FAILURE'
+                    throw e
+                } finally {
+                    stage('Reports') {
+                        steps{
+                            allure([
+                                includeProperties: false,
+                                jdk: '',
+                                properties: [],
+                                reportBuildPolicy: 'ALWAYS',
+                                results: [[path: 'target/allure-results']]
+                            ])
+                        }
+                    }
                 }
             }
         }
