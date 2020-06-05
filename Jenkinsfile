@@ -17,7 +17,6 @@ pipeline {
 
         stage("Build docker image") {
             steps {
-                sh "git clone https://github.com/twesttt/dz6-selenium-selectors.git"
                 sh "cd dz6-selenium-selectors"
                 sh "git checkout allure-report"
                 sh "git pull"
