@@ -4,7 +4,7 @@
 # from selenium.webdriver.support import expected_conditions as EC
 from .BasePage import BasePage
 import logging
-
+import allure
 
 class EditProductPage(BasePage):
     """Локаторы для страницы редактирования продукта"""
@@ -37,50 +37,50 @@ class EditProductPage(BasePage):
 
     def fill_the_required_product_fields(self, test_data):
         """Заполняем форму продукта тестовыми данными"""
-
-        self._wait_for_visible(self.FORM_PRODUCT)
-        self._input(self.PRODUCT_NAME, test_data)
-        self._input(self.META_TAG_TITLE, test_data)
-        self._click(self.TAB_DATA)
-        self._input(self.MODEL_NAME, test_data)
-        self.logger.info("Product form is filled with new data")
-        return self
+        with allure.step("Заполняем только required поля в форме продукта"):
+            self._wait_for_visible(self.FORM_PRODUCT)
+            self._input(self.PRODUCT_NAME, test_data)
+            self._input(self.META_TAG_TITLE, test_data)
+            self._click(self.TAB_DATA)
+            self._input(self.MODEL_NAME, test_data)
+            self.logger.info("Product form is filled with new data")
+            return self
 
     def change_product_price(self, price):
         """Изменяет цену продукта"""
-
-        self._click(self.TAB_DATA)
-        self._input(self.INPUT_PRICE, price)
-        self.logger.info(f'Product price is changed to {price}')
-        return self
+        with allure.step(f"Изменяем цену продукта на: {price}"):
+            self._click(self.TAB_DATA)
+            self._input(self.INPUT_PRICE, price)
+            self.logger.info(f'Product price is changed to {price}')
+            return self
 
     def change_product_quantity(self, quantity):
         """Изменяет количество продукта"""
-
-        self._click(self.TAB_DATA)
-        self._input(self.INPUT_QUANTITY, quantity)
-        self.logger.info(f'Product quantity is changed to {quantity}')
-        return self
+        with allure.step(f"Изменяем количество продукта на: {quantity}"):
+            self._click(self.TAB_DATA)
+            self._input(self.INPUT_QUANTITY, quantity)
+            self.logger.info(f'Product quantity is changed to {quantity}')
+            return self
 
     def add_special(self, priority, price):
         """Добавляет специальную цену продукта"""
-
-        self._click(self.TAB_SPECIAL)
-        self._click(self.ADD_SPECIAL)
-        self._input(self.INPUT_PRIORITY_OF_SPECIAL, priority)
-        self._input(self.INPUT_PRICE_OF_SPECIAL, price)
-        return self
+        with allure.step(f"Добавлаяем специальное предложение. Цена: {price} Приоритет: {priority}"):
+            self._click(self.TAB_SPECIAL)
+            self._click(self.ADD_SPECIAL)
+            self._input(self.INPUT_PRIORITY_OF_SPECIAL, priority)
+            self._input(self.INPUT_PRICE_OF_SPECIAL, price)
+            return self
 
     def delete_last_added_special(self):
-        """Удалает последнюю добавленную специальную цену продукта"""
-
-        self._click(self.TAB_SPECIAL)
-        self._click(self.DELETE_LAST_ADDED_SPECIAL)
-        return self
+        """Удалает последнюю добавленную специальную цену на продукт"""
+        with allure.step("Удалаем последнюю добавленную специальную цену на продукт"):
+            self._click(self.TAB_SPECIAL)
+            self._click(self.DELETE_LAST_ADDED_SPECIAL)
+            return self
 
     def save_product_information(self):
         """Сохранить изменения в описании продукта"""
-
-        self._click(self.SAVE_BUTTON)
-        self.logger.info("New product information is saved")
-        return self
+        with allure.step("Сохраняем изменения в описании продукта"):
+            self._click(self.SAVE_BUTTON)
+            self.logger.info("New product information is saved")
+            return self

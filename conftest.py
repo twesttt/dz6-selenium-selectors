@@ -14,7 +14,7 @@ def pytest_addoption(parser):
     parser.addoption("--browser", "-B", action="store", default="chrome", help="Select browser")
     parser.addoption("--wait", action="store", default=20, help="Specify browser implicitly wait")
     parser.addoption("--log_file", action="store", default=None, help="Specify file name for the log output")
-    parser.addoption("--log_level", action="store", default="warning", help="Define log level")
+    parser.addoption("--log_level", action="store", default="info", help="Define log level")
     parser.addoption("--executor", action="store", default="192.168.0.100")
 
 
@@ -83,22 +83,22 @@ def browser(request):
 """Run tests remotely using Selenoid"""
 
 
-@pytest.fixture
-def selenoid(request):
-    wait_param = request.config.getoption("--wait")
-    url = request.config.getoption("--url")
-    capabilities = {
-        "browserName": "chrome",
-        "version": "79.0",
-        "enableVNC": True,
-        "enableVideo": False,
-        "name": "Tanya"
-    }
-    executor = request.config.getoption("--executor")
-    wd = webdriver.Remote(command_executor=f"http://{executor}:4444/wd/hub",
-                          desired_capabilities=capabilities)
-    wd.implicitly_wait(wait_param)
-    wd.maximize_window()
-    wd.get(url)
-    request.addfinalizer(wd.quit)
-    return wd
+# @pytest.fixture
+# def selenoid(request):
+#     wait_param = request.config.getoption("--wait")
+#     url = request.config.getoption("--url")
+#     capabilities = {
+#         "browserName": "chrome",
+#         "version": "79.0",
+#         "enableVNC": True,
+#         "enableVideo": False,
+#         "name": "Tanya"
+#     }
+#     executor = request.config.getoption("--executor")
+#     wd = webdriver.Remote(command_executor=f"http://{executor}:4444/wd/hub",
+#                           desired_capabilities=capabilities)
+#     wd.implicitly_wait(wait_param)
+#     wd.maximize_window()
+#     wd.get(url)
+#     request.addfinalizer(wd.quit)
+#     return wd

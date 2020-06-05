@@ -1,7 +1,7 @@
 from .BasePage import BasePage
 from selenium.common.exceptions import NoSuchElementException
 import logging
-
+import allure
 
 class AdminProductsPage(BasePage):
     """Локаторы для страницы администрирования продуктов"""
@@ -26,36 +26,37 @@ class AdminProductsPage(BasePage):
 
     def find_product(self, product_name):
         """Находит продукт из списка по имени и возвращает текст из поля Product Name"""
-        self.logger.info(f"I'm looking for product {product_name}")
-        self._wait_for_visible(self.FILTER_PRODUCT_FORM)
-        self._input(self.INPUT_PRODUCT_NAME_IN_FILTER, product_name)
-        self._click(self.FILTER_BUTTON)
-        try:
-            return self._get_element_text(self.FIRST_PRODUCT_IN_THE_LIST)
-        except NoSuchElementException:
-            "Product is not found"
-            return False
+        with allure.step(f"Поиск продукта по имени:{product_name}"):
+            self.logger.info(f"I'm looking for product {product_name}")
+            self._wait_for_visible(self.FILTER_PRODUCT_FORM)
+            self._input(self.INPUT_PRODUCT_NAME_IN_FILTER, product_name)
+            self._click(self.FILTER_BUTTON)
+            try:
+                return self._get_element_text(self.FIRST_PRODUCT_IN_THE_LIST)
+            except NoSuchElementException:
+                "Product is not found"
+                return False
 
     def click_add_product(self):
         """Добавляет продукт"""
-        print("Add product")
-        self._wait_for_visible(AdminProductsPage.ADD_PRODUCT)
-        self._click(AdminProductsPage.ADD_PRODUCT)
+        with allure.step("Клик на кнопку добавить продукт"):
+            self._wait_for_visible(AdminProductsPage.ADD_PRODUCT)
+            self._click(AdminProductsPage.ADD_PRODUCT)
 
     def click_edit_product(self):
         """Изменяет имя продукта"""
-
-        self._click(self.FIRST_PRODUCT_EDIT_BUTTON)
+        with allure.step("Клик на кнопку редактирования продукта"):
+            self._click(self.FIRST_PRODUCT_EDIT_BUTTON)
 
     def delete_product(self, name):
         """Удалаяет продукт"""
-
-        self.find_product(name)
-        self._click(self.FIRST_PRODUCT_CHECKBOX)
-        self.logger.info(f"I'm going to delete {name} product")
-        self._click(self.DELETE_PRODUCT)
-        self.driver.switch_to.alert.accept()
-        return self
+        with allure.step(f"Удалаяем продукт:{name}"):
+            self.find_product(name)
+            self._click(self.FIRST_PRODUCT_CHECKBOX)
+            self.logger.info(f"I'm going to delete {name} product")
+            self._click(self.DELETE_PRODUCT)
+            self.driver.switch_to.alert.accept()
+            return self
 
     def get_product_info(self, element):
         """Возвращает текст характеристики продукта"""
