@@ -17,9 +17,7 @@ pipeline {
 
         stage("Build docker image") {
             steps {
-                sh "cd dz6-selenium-selectors"
-                sh "git checkout allure-report"
-                sh "git pull"
+                sh "git branch"
                 sh "docker build -t mytest ."
             }
         }
