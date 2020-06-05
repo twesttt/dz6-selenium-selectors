@@ -26,7 +26,7 @@ pipeline {
                 sh "cd dz6-selenium-selectors"
                 sh "git checkout allure-report"
                 sh "git pull"
-                docker run hello-world
+                docker { image 'hello-world' }
 //                 sh "docker build -t mytest ."
 
             }
