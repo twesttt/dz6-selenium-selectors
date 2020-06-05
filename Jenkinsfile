@@ -30,8 +30,10 @@ pipeline {
     }
     post {
         always {
-            steps {
-                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+            stage("Allure report"){
+                steps {
+                    allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+                }
             }
         }
     }
