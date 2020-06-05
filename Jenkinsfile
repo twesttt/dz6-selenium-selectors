@@ -1,0 +1,24 @@
+properties([disableConcurrentBuilds()])
+
+pipeline {
+    agent {
+        label 'master'
+        }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+        timestamps()
+    }
+    stages {
+        stage("First step") {
+            steps {
+                sh "free -h"
+            }
+        }
+
+        stage("Third step") {
+            steps {
+                sh "git clone https://github.com/twesttt/dz6-selenium-selectors.git"
+            }
+        }
+    }
+}
