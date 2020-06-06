@@ -27,20 +27,10 @@ pipeline {
                 sh "docker run mytest"
             }
         }
-
-        stage("Allure report"){
-            steps {
-                allure includeProperties: false, jdk: '', results: [[path: 'target/allure-results']]
-            }
+    }
+    post {
+        always {
+            allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
         }
     }
 }
-//     post {
-//         always {
-//             stage("Allure report"){
-//                 steps {
-//                     allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
-//                 }
-//             }
-//         }
-//     }

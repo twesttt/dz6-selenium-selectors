@@ -196,11 +196,3 @@ def test_special_priority(browser):
         .check_console_logs()
 
 
-
-
-# @allure.feature('Тест Эволюция')
-# @allure.severity(allure.severity_level.TRIVIAL)
-# def test_special_priority(browser):
-#     profile = browser.find_element_by_css_selector("#page h1 > span > a.i-ljuser-username > b")
-#     profile.click()
-#     assert 1 == 1
