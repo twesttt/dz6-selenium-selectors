@@ -9,7 +9,7 @@ import logging
 def pytest_addoption(parser):
     """Параметр для задания url"""
 
-    parser.addoption("--url", "-U", action="store", default="http://192.168.0.100/opencart/admin/",
+    parser.addoption("--url", "-U", action="store", default="http://31.211.122.74/opencart/admin/",
                      help="Specify opencart url")
     parser.addoption("--browser", "-B", action="store", default="chrome", help="Select browser")
     parser.addoption("--wait", action="store", default=20, help="Specify browser implicitly wait")
