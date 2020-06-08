@@ -4,7 +4,6 @@ from selenium import webdriver
 from selenium.webdriver.support.events import EventFiringWebDriver, AbstractEventListener
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import logging
-import mysql.connector
 import paramiko
 
 
@@ -106,37 +105,20 @@ def selenoid(request):
     return wd
 
 
-@pytest.fixture
-def connect_db(request):
-    connection = mysql.connector.connect(user='ocuser', password='PASSWORD', database='opencart', host='0.0.0.0',
-                                         port='3306')
-    cursor = connection.cursor()
-
-    def fin():
-        cursor.close()
-        connection.close()
-
-    #
-    request.addfinalizer(fin())
-    return cursor
-
-
-@pytest.fixture(scope='session')
+@pytest.fixture()
 def connect_ssh(request):
-    host = '192.168.0.106'
+    host = '192.168.0.100'
     port = 22
-    username = 'tta'
+    username = 'tanya'
     password = '111'
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(hostname=host, port=port, username=username, password=password)
+    yield ssh
 
-    yield
-
-    def fin():
-        print("Teardown ssh")
-        ssh.close()
-
-    request.addfinalizer(fin())
-    return ssh.connect(hostname=host, port=port, username=username, password=password)
-
+    # def fin():
+    #     print("Teardown ssh")
+    #     ssh.close()
+    #
+    # request.addfinalizer(fin())
 
