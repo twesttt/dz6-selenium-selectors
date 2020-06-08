@@ -107,7 +107,7 @@ def selenoid(request):
 
 @pytest.fixture()
 def connect_ssh(request):
-    host = '192.168.0.100'
+    host = '192.168.0.101'
     port = 22
     username = 'tanya'
     password = '111'

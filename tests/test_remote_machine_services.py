@@ -54,6 +54,7 @@ def check_db_using_db_connect():
 
 def test_db_status(connect_ssh):
     """First MySQL server is stopped, then check it is stopped, than we start the service and check it is up"""
+
     connect_ssh.exec_command("echo 111 | sudo -S service mysql stop")
     db_status = check_db_using_db_connect()
     assert db_status == 0
