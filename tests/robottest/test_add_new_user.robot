@@ -1,5 +1,7 @@
 *** Settings ***
 Library  SeleniumLibrary
+Resource  test_login.robot
+Resource  test_delete_user.robot
 
 *** Variables ***
 ${URL}          http://localhost/opencart/admin
@@ -14,7 +16,6 @@ User Login
     Input Text      id:input-password     ${USER_NAME}
     Click Button    css:button[type='submit']
     Title Should Be  Dashboard
-
 
 Add User
     [Arguments]      ${USER_NAME}
