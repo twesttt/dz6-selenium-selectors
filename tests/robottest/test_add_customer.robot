@@ -1,22 +1,12 @@
 *** Settings ***
 Library  SeleniumLibrary
-Resource  test_login.robot
-#Resource  test_delete_user.robot
+Resource  common.robot
+
 
 *** Variables ***
-${URL}          http://localhost/opencart/admin
-${BROWSER}      Chrome
 ${CUSTOMER_URL}     http://localhost/opencart/
 
 *** Keywords ***
-User Login
-    [Arguments]      ${USER_NAME}
-    Open browser    ${URL}   ${BROWSER}
-    Set Selenium Speed  0.1
-    Input Text      id:input-username     ${USER_NAME}
-    Input Text      id:input-password     ${USER_NAME}
-    Click Button    css:button[type='submit']
-    Title Should Be  Dashboard
 
 Add Customer
     [Arguments]      ${CUSTOMER_NAME}   ${CUSTOMER_EMAIL}

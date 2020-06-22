@@ -80,7 +80,7 @@ def browser(request):
     return driver
 
 
-"""Run tests remotely using Selenoid"""
+"""Run tests remotely using browser"""
 
 
 @pytest.fixture
